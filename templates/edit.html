@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>edit</title>
+    <style>
+        .btn-group button {
+            background-color: #04AA6D; /* Green background */
+            border: 1px solid green; /* Green border */
+            color: white; /* White text */
+            padding: 8px 18px; /* Some padding */
+            cursor: pointer; /* Pointer/hand icon */
+            float: left; /* Float the buttons side by side */
+            border-radius: 20%;
+        }
+
+        /* Clear floats (clearfix hack) */
+        .btn-group:after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+        .btn-group button:not(:last-child) {
+            border-right: none; /* Prevent double borders */
+        }
+
+        /* Add a background color on hover */
+        .btn-group button:hover {
+            background-color: #3e8e41;
+        }
+    </style>
+</head>
+<body>
+<nav></nav>
+<table>
+    <thead>
+    <tr>
+        <th>dolgok</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for etel in etelek %}
+        {% if etel.is_edit == False %}
+            <form name="view" method="post">
+                <tr>
+                    <td>{{ etel.nev }}</td>
+                    <td>{{ etel.leiras }}</td>
+                    <td>{{ etel.allergen }}</td>
+                    <td class="btn-group">
+                        <button name="edit.change" type="submit" value="{{ etel.id }}">Edit</button>
+                        <button name="edit.del" type="submit" value="{{ etel.id }}">Edit</button>
+                    </td>
+
+                </tr>
+            </form>
+        {% else %}
+            <form method="post">
+                <tr>
+                    <input name="save.id" hidden="hidden" value="{{ etel.id }}">
+                    <td><input type="text" name="save.name" value="{{ etel.nev }}" required></td>
+                    <td><input type="text" name="save.leiras" value="{{ etel.leiras }}" required></td>
+                    <td><input type="text" name="save.allergen" value="{{ etel.allergen }}" required></td>
+                    <td><button name="save_b" type="submit">Mentés</button></td>
+                </tr>
+            </form>
+        {% endif %}
+    {% endfor %}
+    </tbody>
+</table>
+</body>
+</html>
