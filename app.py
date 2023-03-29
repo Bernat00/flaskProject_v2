@@ -3,7 +3,7 @@ import foods
 
 app = Flask(__name__)
 
-foods_path = '/home/bernat/PycharmProjects/flaskProject/templates/foods.csv'
+foods_path = 'templates/foods.csv'
 
 
 @app.route('/')
@@ -56,7 +56,7 @@ def edit_etel():
         if data[0] == 'yes':
             del data[0]
             food_id = data.pop(0)
-            foods.change(foods_path, food_id , data)
+            foods.change(foods_path, food_id, data)
 
 
             # ez epikk

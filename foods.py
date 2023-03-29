@@ -74,9 +74,16 @@ def delete(path, nev):
 def change(path, mi_kell, data):
     uj = []
     regi = load(path)
+
     for sor in regi:
-        if sor["id"] == mi_kell:
-            uj.append(data)
+        if sor["id"] == int(mi_kell):
+            dik_from_data = {
+                'nev': data[0],
+                'leiras': data[1],
+                'allergen': data[2],
+                'id': sor["id"]
+            }
+            uj.append(dik_from_data)
         else:
             uj.append(sor)
 
