@@ -54,7 +54,9 @@ def edit_etel():
                     data.append(request.form[b])
 
         if data[0] == 'yes':
-            print(data)
+            del data[0]
+            food_id = data.pop(0)
+            foods.change(foods_path, food_id , data)
 
 
             # ez epikk

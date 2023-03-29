@@ -69,3 +69,15 @@ def delete(path, nev):
             data_new.append(line)
 
     write(path, data_new)
+
+
+def change(path, mi_kell, data):
+    uj = []
+    regi = load(path)
+    for sor in regi:
+        if sor["id"] == mi_kell:
+            uj.append(data)
+        else:
+            uj.append(sor)
+
+    write(path, uj)
