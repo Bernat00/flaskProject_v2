@@ -3,7 +3,7 @@ import foods
 
 app = Flask(__name__)
 
-foods_path = 'templates/foods.csv'
+foods_path = '/home/bernat/PycharmProjects/flaskProject/templates/foods.csv'
 
 
 @app.route('/')
