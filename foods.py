@@ -41,7 +41,7 @@ def add(path, kaja):
         kelid = 0
 
     with open(path, 'a', encoding='UTF-8') as file:
-        kaja = '\n' + kaja[0] + ';' + kaja[1] + ';' + kaja[2] + ';' + str(kelid + 1)
+        kaja = '\n' + kaja[name] + ';' + kaja[leiras] + ';' + kaja[allergen] + ';' + str(kelid + 1)
         file.write(kaja)
 
 
@@ -88,3 +88,12 @@ def change(path, mi_kell, data):
             uj.append(sor)
 
     write(path, uj)
+
+
+def error_handling(data):
+    if data['name'] == '':
+        return 'no_name'
+    if data['allergen'] == '':
+        return 'no_allergen'
+    if data['leiras'] == '':
+        return 'no_leiras'

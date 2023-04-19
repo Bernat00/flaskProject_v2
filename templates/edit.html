@@ -34,12 +34,6 @@
 <body>
 <nav></nav>
 <table>
-    <thead>
-    <tr>
-        <th>dolgok</th>
-    </tr>
-    </thead>
-    <tbody>
     {% for etel in etelek %}
         {% if etel.is_edit == False %}
             <form name="view" method="post">
@@ -47,26 +41,47 @@
                     <td>{{ etel.nev }}</td>
                     <td>{{ etel.leiras }}</td>
                     <td>{{ etel.allergen }}</td>
+                    {% if is_add == False %}
                     <td class="btn-group">
                         <button name="edit.change" type="submit" value="{{ etel.id }}">Edit</button>
                         <button name="edit.del" type="submit" value="{{ etel.id }}">Törlés</button>
                     </td>
-
+                    {% endif %}
                 </tr>
             </form>
         {% else %}
             <form method="post">
                 <tr>
-                    <input name="save.id" hidden="hidden" value="{{ etel.id }}">
-                    <td><input type="text" name="save.name" value="{{ etel.nev }}" required></td>
-                    <td><input type="text" name="save.leiras" value="{{ etel.leiras }}" required></td>
-                    <td><input type="text" name="save.allergen" value="{{ etel.allergen }}" required></td>
-                    <td><button name="save_b" type="submit">Mentés</button></td>
+                    <input name="id" hidden="hidden" value="{{ etel.id }}">
+                    <td><input type="text" name="name" value="{{ etel.nev }}" required></td>
+                    <td><input type="text" name="leiras" value="{{ etel.leiras }}" required></td>
+                    <td><input type="text" name="allergen" value="{{ etel.allergen }}" required></td>
+                    <td>
+                        <button name="save_b" type="submit">Mentés</button>
+                    </td>
                 </tr>
             </form>
         {% endif %}
     {% endfor %}
-    </tbody>
+    {% if is_add == False %}
+        <form>
+            <tr>
+                <td>
+                    <button type="button" onclick="location.href='/edit/add'">ADD</button>
+                </td>
+            </tr>
+        </form>
+    {% else %}
+        <form method="post">
+            <tr><td colspan="4"><label for="add">Új étel:</label></td></tr>
+            <tr id="add">
+                <td><input type="text" id="name" name="name" required></td>
+                <td><input type="text" id="discription" name="leiras" required></td>
+                <td><input type="text" id="allergen" name="allergen" required></td>
+                <td><button type="submit">Feltöltés</button></td>
+            </tr>
+        </form>
+    {% endif %}
 </table>
 </body>
 </html>

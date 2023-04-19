@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for
+from flask import Flask, render_template, request, url_for, redirect
 import foods
 
 app = Flask(__name__)
@@ -25,46 +25,55 @@ def uj_etel():
 
 
 @app.route('/edit', methods={'GET', 'POST'})
-def edit_etel():
-    etelek = foods.edit(foods_path)
+def edit_etel(is_add=False, is_edit=False, etelek=None):
+    if etelek is None:
+        etelek = foods.load(foods_path)
+
+    for etel in etelek:
+        etel['is_edit'] = False
 
     if request.method == "POST":
-        data = ['no']
-        for key in request.form:
-            if key == 'edit.change':
-                for etel in etelek:
-                    if etel['id'] == int(request.form["edit.change"]):
-                        etel['is_edit'] = True
+        try:
+            for etel in etelek:
+                if etel['id'] == int(request.form["edit.change"]):        #ez még mindig nem túl jó
+                    etel['is_edit'] = True
 
-        for a in request.form:
-            if a == 'edit.del':
-                for etel in etelek:
-                    if etel['id'] == int(request.form["edit.del"]):
-                        foods.delete(foods_path, etel['nev'])
+        except:...
+        try:
+            edit_change()
+            return redirect(url_for('edit_etel'))
+        except:...
+    # return render_template(url_for(etel_add))
 
-        for b in request.form:
-            if b.startswith('save.'):
-                if b == 'save.id':
-                    data = ['yes', request.form[b]]
-                if b == 'save.name':
-                    data.append(request.form[b])
-                if b == 'save.leiras':
-                    data.append(request.form[b])
-                if b == 'save.allergen':
-                    data.append(request.form[b])
-
-        if data[0] == 'yes':
-            del data[0]
-            food_id = data.pop(0)
-            foods.change(foods_path, food_id, data)
+    return render_template('edit.html', etelek=etelek, is_add=is_add, is_edit=is_edit)
 
 
-            # ez epikk
-    #  for key in request.form:
-    #      if key.startswith('edit.'):
-    #          request_id = request.form[key]
+def edit_change():
+    save_id = request.form['id']
+    name = request.form['name']
+    leiras = request.form['leiras']
+    allergen = request.form['allergen']
+    data = [name, leiras, allergen]
 
-    return render_template('edit.html', etelek=etelek)
+    foods.change(foods_path, save_id, data)
+
+
+@app.route('/edit/add', methods={'GET', 'POST'})
+def etel_add():
+    if request.method == "POST":
+        nev = request.form["name"]
+        leiras = request.form["leiras"]
+        allergen = request.form["allergen"]
+        data = {'name':nev,
+                  'leiras': leiras,
+                  'allergen': allergen}
+        if foods.error_handling(data) is None:
+            foods.add(foods_path, data)
+        return edit_etel(error=foods.error_handling(data)) #kéne ilyen több helyre is és az alert
+    return edit_etel(True)
+
+
+# @app.route(f'edit/{változó}')
 
 
 # password,urlrandomization
