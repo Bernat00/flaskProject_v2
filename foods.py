@@ -41,7 +41,7 @@ def add(path, kaja):
         kelid = 0
 
     with open(path, 'a', encoding='UTF-8') as file:
-        kaja = '\n' + kaja[name] + ';' + kaja[leiras] + ';' + kaja[allergen] + ';' + str(kelid + 1)
+        kaja = '\n' + kaja['name'] + ';' + kaja['leiras'] + ';' + kaja['allergen'] + ';' + str(kelid + 1)
         file.write(kaja)
 
 
@@ -91,9 +91,22 @@ def change(path, mi_kell, data):
 
 
 def error_handling(data):
+    data_on_disk = load('templates/foods.csv')
+    errors = []
+    names = []
+
+    for i in data_on_disk:
+        names.append(i)
+
     if data['name'] == '':
-        return 'no_name'
+        errors.append('no_name')
     if data['allergen'] == '':
-        return 'no_allergen'
+        errors.append('no_allergen')
     if data['leiras'] == '':
-        return 'no_leiras'
+        errors.append('no_leiras')
+
+
+    if data['name'] in names:
+        errors.append('same_name')
+
+    print(errors)
