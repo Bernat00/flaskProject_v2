@@ -48,16 +48,22 @@ def edit_etel(is_add=False, etelek=None, who_is_edited=None, errors=None):
 
 @app.route('/edit/change/<int:food_id>', methods={'GET', 'POST'})  # nem értem pontosan mit csinál ez <valami>
 def edit_change(food_id):
-    etelek = foods.load(foods_path)
+    data = foods.load(foods_path)
+    errors = None
 
     if request.method == 'POST':
         name = request.form['name']
         leiras = request.form['leiras']
         allergen = request.form['allergen']
         data = [name, leiras, allergen]
-        foods.change(foods_path, food_id, data)
+        errors = foods.error_handling(data)
+        if errors is None:
+            foods.change(foods_path, food_id, data)
+            food_id = None
 
-    return edit_etel(etelek=etelek, who_is_edited=food_id)
+    print(url_for('etel_del', food_nev='hamburger'))
+
+    return redirect(url_for('edit_etel', is_add=False, etelek=data, who_is_edited=food_id, errors=errors))
 
 
 @app.route(f'/edit/del/<food_nev>', methods={'POST'})
