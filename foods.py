@@ -1,3 +1,19 @@
+foods_path = 'templates/foods.csv'
+kajak = []
+sor_id = 0
+
+class Kaja:
+    def __init__(self, path, sor, sor_id):
+        self.path = path
+        self.sor = sor
+        self.nev = self.sor[0]
+        self.leiras = self.sor[1]
+        self.allergen = self.sor[2]
+        self.id = sor_id
+
+
+
+
 def load(path):
     with open(path, 'r', encoding="UTF-8") as file:
         etelek = []
@@ -6,18 +22,14 @@ def load(path):
         file = file.split('\n')
         del file[0]
 
-        for i in file:
-            i = i.split(';')
+        return file
 
-            etel = {
-                'nev': i[0],
-                'leiras': i[1],
-                'allergen': i[2],
-                'id': int(i[3])
-            }
-            etelek.append(etel)
 
-        return etelek
+for sor in load(foods_path):
+    sor_id += 1
+    sor = sor.split(';')
+    sor = Kaja(foods_path, sor, sor_id)
+    kajak.append(sor)
 
 
 def write(path, data):
@@ -41,7 +53,7 @@ def add(path, kaja):
         kelid = 0
 
     with open(path, 'a', encoding='UTF-8') as file:
-        kaja = '\n' + kaja['name'] + ';' + kaja['leiras'] + ';' + kaja['allergen'] + ';' + str(kelid + 1)
+        kaja = '\n' + kaja['nev'] + ';' + kaja['leiras'] + ';' + kaja['allergen'] + ';' + str(kelid + 1)
         file.write(kaja)
 
 
@@ -77,13 +89,7 @@ def change(path, mi_kell, data):
 
     for sor in regi:
         if sor["id"] == int(mi_kell):
-            dik_from_data = {
-                'nev': data[0],
-                'leiras': data[1],
-                'allergen': data[2],
-                'id': sor["id"]
-            }
-            uj.append(dik_from_data)
+            uj.append(data)
         else:
             uj.append(sor)
 
@@ -98,15 +104,14 @@ def error_handling(data):
     for i in data_on_disk:
         names.append(i)
 
-    if data['name'] == '':
+    if data['nev'] == '':
         errors.append('no_name')
     if data['allergen'] == '':
         errors.append('no_allergen')
     if data['leiras'] == '':
         errors.append('no_leiras')
 
-
-    if data['name'] in names:
+    if data['nev'] in names:
         errors.append('same_name')
 
     print(errors)

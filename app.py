@@ -41,12 +41,12 @@ def edit_etel(is_add=False, etelek=None, who_is_edited=None, errors=None):
                 etel['is_edit'] = False
     else:
         for etel in etelek:
-            etel['is_edit'] = False
+            etel['is_edit'] = False    # ezé kell az objektum!!!!!!!!!!
 
     return render_template('edit.html', etelek=etelek, is_add=is_add, errors=errors)
 
 
-@app.route('/edit/change/<int:food_id>', methods={'GET', 'POST'})  # nem értem pontosan mit csinál ez <valami>
+@app.route('/edit/change/<int:food_id>', methods={'GET', 'POST'})
 def edit_change(food_id):
     data = foods.load(foods_path)
     errors = None
@@ -55,7 +55,7 @@ def edit_change(food_id):
         name = request.form['name']
         leiras = request.form['leiras']
         allergen = request.form['allergen']
-        data = [name, leiras, allergen]
+        data = {'nev': name, 'leiras': leiras, 'allergen': allergen}
         errors = foods.error_handling(data)
         if errors is None:
             foods.change(foods_path, food_id, data)
@@ -63,7 +63,7 @@ def edit_change(food_id):
 
     print(url_for('etel_del', food_nev='hamburger'))
 
-    return redirect(url_for('edit_etel', is_add=False, etelek=data, who_is_edited=food_id, errors=errors))
+    return edit_etel(is_add=False, etelek=data, who_is_edited=food_id, errors=errors)
 
 
 @app.route(f'/edit/del/<food_nev>', methods={'POST'})
