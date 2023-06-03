@@ -2,16 +2,21 @@ foods_path = 'templates/foods.csv'
 kajak = []
 sor_id = 0
 
+
 class Kaja:
-    def __init__(self, path, sor, sor_id):
-        self.path = path
-        self.sor = sor
+    def __init__(self, etel):
+        self.sor = etel
         self.nev = self.sor[0]
         self.leiras = self.sor[1]
         self.allergen = self.sor[2]
+        self.id = self.sor[3]
         self.id = sor_id
 
+    def csv_format(self):
+        return f'\n {self.nev} ; {self.leiras} ; {self.allergen} ; {self.id}'
 
+    def list_format(self):
+        return [self.nev, self.leiras, self.allergen, self.id]
 
 
 def load(path):
@@ -25,36 +30,44 @@ def load(path):
         return file
 
 
+def get_food_by_id(food_id):
+    for kaja in kajak:
+        if kaja.id == food_id:
+            return kaja
+    return 'n/a'
+
+
 for sor in load(foods_path):
-    sor_id += 1
     sor = sor.split(';')
-    sor = Kaja(foods_path, sor, sor_id)
+    sor = Kaja(sor)
     kajak.append(sor)
 
 
-def write(path, data):
-    kajak = 'nev;leiras;allergenek'
+def write(path=foods_path):
+    kajak_uj = 'nev;leiras;allergenek;id'
     counter = 1
-    for i in data:
-        kaja = '\n' + i['nev'] + ';' + i['leiras'] + ';' + i['allergen'] + ';' + str(counter)
-        kajak = kajak + kaja
+
+    for line in kajak:
+        line.id = counter
+        kajak_uj = kajak_uj + line.csv_format()
         counter += 1
 
     with open(path, 'w', encoding='UTF-8') as file:
-        file.write(kajak)
+        file.write(kajak_uj)
 
 
-def add(path, kaja):
-    kelid = load(path)
-    kelid = kelid[-1]
+def add(data):
     try:
-        kelid = kelid["id"]
+        kelid = kajak[-1].id
     except:
         kelid = 0
+        print('Első adat!')
 
-    with open(path, 'a', encoding='UTF-8') as file:
-        kaja = '\n' + kaja['nev'] + ';' + kaja['leiras'] + ';' + kaja['allergen'] + ';' + str(kelid + 1)
-        file.write(kaja)
+    data = [data[0], data[1], data[2], kelid]
+
+    kajak.append(Kaja(data))
+
+    write()
 
 
 def edit(path):
@@ -104,14 +117,14 @@ def error_handling(data):
     for i in data_on_disk:
         names.append(i)
 
-    if data['nev'] == '':
+    if data[0] == '':
         errors.append('no_name')
-    if data['allergen'] == '':
+    if data[1] == '':
         errors.append('no_allergen')
-    if data['leiras'] == '':
+    if data[2] == '':
         errors.append('no_leiras')
 
-    if data['nev'] in names:
+    if data[0] in names:
         errors.append('same_name')
 
     print(errors)

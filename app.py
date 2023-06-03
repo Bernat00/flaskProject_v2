@@ -3,7 +3,7 @@ import foods
 
 app = Flask(__name__)
 
-foods_path = 'templates/foods.csv'
+foods_path = foods.foods_path
 
 
 @app.route('/')
@@ -19,29 +19,15 @@ def uj_etel():
         name = request.form["name"]
         leiras = request.form["leiras"]
         allergen = request.form["allergen"]
-        valami = {
-            name: 'name',
-            leiras: 'leiras',
-            allergen: 'allergen'
-        }
-        foods.add(foods_path, valami)
+        valami = [name, leiras, allergen]
+        foods.add(valami)
     return render_template('add.html')
 
 
 @app.route('/edit', methods={'GET', 'POST'})
 def edit_etel(is_add=False, etelek=None, who_is_edited=None, errors=None):
     if etelek is None:
-        etelek = foods.load(foods_path)
-
-    if who_is_edited is not None:
-        for etel in etelek:
-            if etel['id'] == who_is_edited:
-                etel['is_edit'] = True
-            else:
-                etel['is_edit'] = False
-    else:
-        for etel in etelek:
-            etel['is_edit'] = False    # ezé kell az objektum!!!!!!!!!!
+        etelek = foods.kajak
 
     return render_template('edit.html', etelek=etelek, is_add=is_add, errors=errors)
 
@@ -78,11 +64,9 @@ def etel_add():
         nev = request.form["name"]
         leiras = request.form["leiras"]
         allergen = request.form["allergen"]
-        data = {'name': nev,
-                'leiras': leiras,
-                'allergen': allergen}
+        data = [nev, leiras, allergen]
         if foods.error_handling(data) is None:
-            foods.add(foods_path, data)
+            foods.add(data)
         return edit_etel(errors=foods.error_handling(data))  # kéne ilyen több helyre is és az alert
     return edit_etel(is_add=True)
 
