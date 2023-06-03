@@ -12,7 +12,7 @@ class Kaja:
         self.id = int(self.sor[3])
 
     def csv_format(self):
-        return f'\n {self.nev} ; {self.leiras} ; {self.allergen} ; {self.id}'
+        return f'\n{self.nev};{self.leiras};{self.allergen};{self.id}'
 
     def list_format(self):
         return [self.nev, self.leiras, self.allergen, self.id]
@@ -69,20 +69,18 @@ def add(data):
     write()
 
 
-def delete(path, nev):
-    data_new = []
-    data = load(path)
-    for line in data:
-        if line["nev"] != nev:
-            data_new.append(line)
-
-    write(path, data_new)
+def delete(nev):
+    for kaja in kajak:
+        if kaja.nev == nev:
+            kajak.remove(kaja)
+            write()
 
 
 def change(mi_kell, data):
     get_food_by_id(mi_kell).nev = data[0]
-    get_food_by_id(mi_kell).nev = data[1]
-    get_food_by_id(mi_kell).nev = data[2]
+    get_food_by_id(mi_kell).leiras = data[1]
+    get_food_by_id(mi_kell).allergen = data[2]
+    write()
 
 
 def error_handling(data):

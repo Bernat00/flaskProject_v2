@@ -13,17 +13,6 @@ def etlap():
     return render_template('home.html', etelek=etelek)
 
 
-@app.route('/add', methods={'GET', 'POST'})
-def uj_etel():
-    if request.method == "POST":
-        name = request.form["name"]
-        leiras = request.form["leiras"]
-        allergen = request.form["allergen"]
-        valami = [name, leiras, allergen]
-        foods.add(valami)
-    return render_template('add.html')
-
-
 @app.route('/edit', methods={'GET', 'POST'})
 def edit_etel(edit_id=None, is_add=False, etelek=None, errors=None):
     if etelek is None:
@@ -34,7 +23,6 @@ def edit_etel(edit_id=None, is_add=False, etelek=None, errors=None):
 
 @app.route('/edit/change/<int:edit_id>', methods={'GET', 'POST'})
 def edit_change(edit_id):
-
     if request.method == 'POST':
         name = request.form['name']
         leiras = request.form['leiras']
@@ -44,14 +32,14 @@ def edit_change(edit_id):
         errors = foods.error_handling(data)  # van e egy item, kép
         if errors is None:
             foods.change(edit_id, data)
-            edit_id = None
+            return redirect(url_for('edit_etel'))
 
-    return redirect(url_for('edit_etel', edit_id=edit_id))
+    return edit_etel(edit_id=edit_id)
 
 
 @app.route(f'/edit/del/<food_nev>', methods={'POST'})
 def etel_del(food_nev):
-    foods.delete(foods_path, food_nev)
+    foods.delete(food_nev)
     return redirect(url_for('edit_etel'))
 
 
