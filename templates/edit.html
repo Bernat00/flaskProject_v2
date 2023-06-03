@@ -35,7 +35,7 @@
 <nav></nav>
 <table>
     {% for etel in etelek %}
-        {% if etel.is_edit == False %}
+        {% if edit_id != etel.id %}
                 <tr>
                     <form name="view" method="post">
                     <td>{{ etel.nev }}</td>
@@ -43,7 +43,7 @@
                     <td>{{ etel.allergen }}</td>
                     </form>
                     <td>
-                        <button type="button" onclick="location.href='{{ url_for('edit_change', food_id=etel.id) }}'" {% if is_add == True %}disabled{% endif %}>edit</button>
+                        <button type="button" onclick="location.href='{{ url_for('edit_change', edit_id=etel.id) }}'" {% if is_add == True %}disabled{% endif %}>edit</button>
 
                         <form action="{{ url_for('etel_del', food_nev=etel.nev) }}" onsubmit="return confirm('Biztosan törli ezt: {{ etel.nev }}?')" method="post">
                             <button type="submit" {% if is_add == True %}disabled{% endif %}>törlés</button>

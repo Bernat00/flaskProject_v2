@@ -9,8 +9,7 @@ class Kaja:
         self.nev = self.sor[0]
         self.leiras = self.sor[1]
         self.allergen = self.sor[2]
-        self.id = self.sor[3]
-        self.id = sor_id
+        self.id = int(self.sor[3])
 
     def csv_format(self):
         return f'\n {self.nev} ; {self.leiras} ; {self.allergen} ; {self.id}'
@@ -70,22 +69,6 @@ def add(data):
     write()
 
 
-def edit(path):
-    data = load(path)
-    asdasd = []
-    for i in data:
-        etel = {
-            'nev': i['nev'],
-            'leiras': i['leiras'],
-            'allergen': i['allergen'],
-            'id': i['id'],
-            'is_edit': False
-        }
-        asdasd.append(etel)
-
-    return asdasd
-
-
 def delete(path, nev):
     data_new = []
     data = load(path)
@@ -96,17 +79,10 @@ def delete(path, nev):
     write(path, data_new)
 
 
-def change(path, mi_kell, data):
-    uj = []
-    regi = load(path)
-
-    for sor in regi:
-        if sor["id"] == int(mi_kell):
-            uj.append(data)
-        else:
-            uj.append(sor)
-
-    write(path, uj)
+def change(mi_kell, data):
+    get_food_by_id(mi_kell).nev = data[0]
+    get_food_by_id(mi_kell).nev = data[1]
+    get_food_by_id(mi_kell).nev = data[2]
 
 
 def error_handling(data):

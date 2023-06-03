@@ -25,31 +25,28 @@ def uj_etel():
 
 
 @app.route('/edit', methods={'GET', 'POST'})
-def edit_etel(is_add=False, etelek=None, who_is_edited=None, errors=None):
+def edit_etel(edit_id=None, is_add=False, etelek=None, errors=None):
     if etelek is None:
         etelek = foods.kajak
 
-    return render_template('edit.html', etelek=etelek, is_add=is_add, errors=errors)
+    return render_template('edit.html', etelek=etelek, is_add=is_add, errors=errors, edit_id=edit_id)
 
 
-@app.route('/edit/change/<int:food_id>', methods={'GET', 'POST'})
-def edit_change(food_id):
-    data = foods.load(foods_path)
-    errors = None
+@app.route('/edit/change/<int:edit_id>', methods={'GET', 'POST'})
+def edit_change(edit_id):
 
     if request.method == 'POST':
         name = request.form['name']
         leiras = request.form['leiras']
         allergen = request.form['allergen']
-        data = {'nev': name, 'leiras': leiras, 'allergen': allergen}
-        errors = foods.error_handling(data)
+        data = [name, leiras, allergen]
+
+        errors = foods.error_handling(data)  # van e egy item, kép
         if errors is None:
-            foods.change(foods_path, food_id, data)
-            food_id = None
+            foods.change(edit_id, data)
+            edit_id = None
 
-    print(url_for('etel_del', food_nev='hamburger'))
-
-    return edit_etel(is_add=False, etelek=data, who_is_edited=food_id, errors=errors)
+    return redirect(url_for('edit_etel', edit_id=edit_id))
 
 
 @app.route(f'/edit/del/<food_nev>', methods={'POST'})
