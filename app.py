@@ -4,13 +4,13 @@ import foods
 app = Flask(__name__)
 
 foods_path = foods.foods_path
+foods.load(foods_path)
 
 
 @app.route('/')
 def etlap():
-    etelek = foods.load(foods_path)
 
-    return render_template('home.html', etelek=etelek)
+    return render_template('home.html', etelek=foods.kajak)
 
 
 @app.route('/edit', methods={'GET', 'POST'})

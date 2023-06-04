@@ -26,7 +26,10 @@ def load(path):
         file = file.split('\n')
         del file[0]
 
-        return file
+        for sor in file:
+            sor = sor.split(';')
+            sor = Kaja(sor)
+            kajak.append(sor)
 
 
 def get_food_by_id(food_id):
@@ -35,11 +38,6 @@ def get_food_by_id(food_id):
             return kaja
     return 'n/a'
 
-
-for sor in load(foods_path):
-    sor = sor.split(';')
-    sor = Kaja(sor)
-    kajak.append(sor)
 
 
 def write(path=foods_path):
