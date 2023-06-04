@@ -39,7 +39,6 @@ def get_food_by_id(food_id):
     return 'n/a'
 
 
-
 def write(path=foods_path):
     kajak_uj = 'nev;leiras;allergenek;id'
     counter = 1
@@ -82,11 +81,11 @@ def change(mi_kell, data):
 
 
 def error_handling(data):
-    data_on_disk = load('templates/foods.csv')
+    data_stored = kajak
     errors = []
     names = []
 
-    for i in data_on_disk:
+    for i in data_stored:
         names.append(i)
 
     if data[0] == '':
